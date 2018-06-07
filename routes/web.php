@@ -21,7 +21,8 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix'=>'admin', 'as'=>'admin', 'middleware' => 'admin'],function(){
+//Route::middleware('admin')->group(function () {
+Route::group(['prefix'=>'admin', 'as'=>'admin.'],function(){
     //Authentication Rotes
     $this->get('login','Auth\LoginController@showLoginForm')->name('login');
     $this->post('login', 'Auth\LoginController@login');
@@ -34,4 +35,15 @@ Route::group(['prefix'=>'admin', 'as'=>'admin', 'middleware' => 'admin'],functio
     $this->post('password/reset','Auth\ResetPasswordController@reset');
 
     Route::get('/home', 'HomeController@index')->name('home');
+
+    /*Carros*/
+    Route::group(['prefix' => 'cars'], function () {
+        Route::get('/index', 'CarController@index')->name('indexCar')->middleware('auth');
+        Route::get('/datatable', 'DatatablesController@carDatatable')->name('carDatatable')->middleware('auth');
+        Route::get('/add', 'CarController@add')->name('addCar')->middleware('admin');
+        Route::post('/add', 'CarController@store')->name('storeCar')->middleware('admin');
+        Route::get('/edit/{id}', 'CarController@edit')->name('editCar')->middleware('admin');
+        Route::post('/edit/{id}', 'CarController@update')->name('updateCar')->middleware('admin');
+        Route::post('/disable/{id}', 'CarController@disable')->name('disableCar')->middleware('admin');
+    });
 });

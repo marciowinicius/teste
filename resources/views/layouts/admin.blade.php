@@ -83,6 +83,17 @@
                 </ul>
             </div>
             <ul class="sidebar-menu collapsible collapsible-accordion" data-collapsible="accordion">
+                <li class="no-padding"><a class="waves-effect waves-grey" href="/"><i
+                                class="material-icons">dashboard</i>Início</a></li>
+                <li class="no-padding">
+                    <a class="collapsible-header waves-effect waves-grey"><i class="material-icons">view_week</i>Cadastros
+                        <i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
+                    <div class="collapsible-body">
+                        <ul>
+                            <li><a href="{{ route('admin.indexCar') }}">Carros</a>
+                        </ul>
+                    </div>
+                </li>
                 <div class="footer">
                     <p class="copyright">FederaIst ©</p>
                     <a href="#!">Privacidade</a> &amp; <a href="#!">Termos</a>
