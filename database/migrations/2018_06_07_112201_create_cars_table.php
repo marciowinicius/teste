@@ -15,6 +15,13 @@ class CreateCarsTable extends Migration
     {
         Schema::create('cars', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('placa', 8)->unique();
+            $table->string('renavam', 20);
+            $table->string('modelo');
+            $table->string('marca');
+            $table->string('ano', 4);
             $table->timestamps();
         });
     }
