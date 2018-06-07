@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(function () {
-        $.drawTable = function() {
+        $.drawTable = function () {
             oTable = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -15,15 +15,18 @@
                     {data: 'modelo'},
                     {data: 'marca'},
                     {data: 'ano'},
-                    @if(\Illuminate\Support\Facades\Auth::user()->role == \FederalSt\User::ROLE_ADMIN)
                     {
                         data: function (data) {
+                                    @if(\Illuminate\Support\Facades\Auth::user()->role == \FederalSt\User::ROLE_ADMIN)
                             var buttonEditar = '<a href="edit/' + data.id + '" class="waves-effect waves-circle waves-light btn-floating btn-list-default" title="Editar"><i class="material-icons" id="icom-list">mode_edit</i></a>';
                             var buttonInativar = '<a class="waves-effect waves-circle waves-light btn-floating btn-list-default" onclick="disable(' + data.id + ');" title="Excluir"><i class="material-icons" id="icom-list">delete</i></a>';
+
                             return buttonEditar + buttonInativar;
+                            @else
+                                return '<a href="view/' + data.id + '" class="waves-effect waves-circle waves-light btn-floating btn-list-default" title="Visualizar"><i class="material-icons" id="icom-list">remove_red_eye</i></a>';
+                            @endif
                         }, orderable: false, searchable: false
                     }
-                    @endif
                 ]
             });
         };
@@ -52,8 +55,7 @@
                         $.ajax({
                             type: "POST",
                             url: '{{url('admin/cars/disable')}}/' + id,
-                            success: function (s)
-                            {
+                            success: function (s) {
                                 if (s == 'success') {
                                     Materialize.toast('Veículo excluído com sucesso.', 7000);
                                     oTable.destroy();
@@ -62,8 +64,7 @@
                                     Materialize.toast('Problemas ao excluir veículo', 7000);
                                 }
                             },
-                            error: function (e)
-                            {
+                            error: function (e) {
                                 if (e == 'success') {
                                     Materialize.toast('Veículo excluído com sucesso.', 7000);
                                     oTable.destroy();

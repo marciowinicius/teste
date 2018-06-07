@@ -18,9 +18,7 @@
                         <th>Modelo</th>
                         <th>Marca</th>
                         <th>Ano</th>
-                        @if(\Illuminate\Support\Facades\Auth::user()->role == \FederalSt\User::ROLE_ADMIN)
-                            <th>Ações</th>
-                        @endif
+                        <th>Ações</th>
                     </tr>
                     </thead>
                 </table>

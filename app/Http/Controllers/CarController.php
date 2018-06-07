@@ -74,6 +74,22 @@ class CarController extends Controller
     }
 
     /**
+     * @param $carId
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function view($carId)
+    {
+        Breadcrumbs::register('federaist', function ($breadcrumbs) use ($carId) {
+            $breadcrumbs->push('Início', route('admin.homeAdmin'));
+            $breadcrumbs->push('Listar', route('admin.indexCarAdmin'));
+            $breadcrumbs->push('Editar', route('admin.editCar', ['id' => $carId]));
+        });
+        $car = Car::find($carId)->toArray();
+        Session::flash('title', 'Veículos');
+        return view('cars.view', compact('car'));
+    }
+
+    /**
      * @param Request $request
      * @return $this|\Illuminate\Http\RedirectResponse
      */
