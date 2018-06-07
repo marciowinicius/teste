@@ -14,7 +14,7 @@ class DatatablesController extends Controller
     public function carDatatable()
     {
         $user = Auth::user();
-        $products = DB::table('products')->select(['id', 'name', 'situation', 'status', 'company_id'])
+        $products = DB::table('cars')->select(['id', 'name', 'situation', 'status', 'company_id'])
             ->where(['excluded' => FALSE]);
         if ($user->hasRole('product.adm') && !$user->isSuperUser()) {
             $shoppingId = Company::find($user->company_id)->shopping_id;
