@@ -12,13 +12,16 @@
 */
 
 Route::get('/', function () {
+    Breadcrumbs::register('federaist', function ($breadcrumbs) {
+        $breadcrumbs->push('Início', route('home'));
+    });
     return view('welcome');
 });
 
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix'=>'admin', 'as'=>'admin.'],function(){
+Route::group(['prefix'=>'admin', 'as'=>'admin', 'middleware' => 'admin'],function(){
     //Authentication Rotes
     $this->get('login','Auth\LoginController@showLoginForm')->name('login');
     $this->post('login', 'Auth\LoginController@login');
@@ -31,6 +34,4 @@ Route::group(['prefix'=>'admin', 'as'=>'admin.'],function(){
     $this->post('password/reset','Auth\ResetPasswordController@reset');
 
     Route::get('/home', 'HomeController@index')->name('home');
-
-
 });

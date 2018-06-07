@@ -3,6 +3,7 @@
 namespace FederalSt\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        Breadcrumbs::register('federaist', function ($breadcrumbs) {
+            $breadcrumbs->push('Início', route('home'));
+        });
         return view('home');
     }
 }
