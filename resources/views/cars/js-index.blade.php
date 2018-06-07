@@ -15,6 +15,7 @@
                     {data: 'modelo'},
                     {data: 'marca'},
                     {data: 'ano'},
+                    @if(\Illuminate\Support\Facades\Auth::user()->role == 2)
                     {
                         data: function (data) {
                             var buttonEditar = '<a href="edit/' + data.id + '" class="waves-effect waves-circle waves-light btn-floating btn-list-default" title="Editar"><i class="material-icons" id="icom-list">mode_edit</i></a>';
@@ -22,6 +23,7 @@
                             return buttonEditar + buttonInativar;
                         }, orderable: false, searchable: false
                     }
+                    @endif
                 ]
             });
         };

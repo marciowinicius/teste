@@ -16,7 +16,7 @@ class CarController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException
      */
-    public function indexCarAdmin()
+    public function index()
     {
         Breadcrumbs::register('federaist', function ($breadcrumbs) {
             $breadcrumbs->push('Início', route('admin.homeAdmin'));
