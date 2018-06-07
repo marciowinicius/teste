@@ -12,11 +12,11 @@ class CarController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException
      */
-    public function index()
+    public function indexCarAdmin()
     {
         Breadcrumbs::register('federaist', function ($breadcrumbs) {
             $breadcrumbs->push('Início', route('home'));
-            $breadcrumbs->push('Listar', route('admin.indexCar'));
+            $breadcrumbs->push('Listar', route('admin.indexCarAdmin'));
         });
         Session::flash('title', 'Carros');
         return view('cars.index');

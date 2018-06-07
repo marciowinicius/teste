@@ -21,7 +21,7 @@ Route::get('/', function () {
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'cars', 'as' => 'cars.', 'middleware' => 'auth'], function () {
-    Route::get('/index', 'CarController@index')->name('indexCarUser');
+    Route::get('/index', 'CarController@indexCarUser')->name('indexCarUser');
     Route::get('/datatable', 'DatatablesController@carDatatable')->name('carUsersDatatable');
 });
 //Route::middleware('admin')->group(function () {

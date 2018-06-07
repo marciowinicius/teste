@@ -18,7 +18,7 @@ class CreateCarsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('placa', 8)->unique();
-            $table->string('renavam');
+            $table->integer('renavam', FALSE, TRUE);
             $table->string('modelo');
             $table->string('marca');
             $table->integer('ano', FALSE, TRUE);
