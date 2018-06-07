@@ -117,3 +117,5 @@ Entre em contato conosco, caso você tenha alguma dúvida ou quando terminar o p
 > Ao rodar o projeto basta acessar a rota '/login' ou só '/' e logar.
 > Usuário ADM : admin@teste.com.br/secret
 > Usuário teste: samanta92@example.org/secret
+
+> Meu repositório tem 2 branchs uma master e outra develop ... É porque sou acostumado a ter um ambiente de testes, homologação e produção. Tentei reproduzir esse costume aqui. Se a equipe for muito grande acaba que fica melhor esse tipo de coisa.
