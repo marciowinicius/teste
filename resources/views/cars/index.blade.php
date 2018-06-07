@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 @section('content')
     <input type="hidden" name="csrf-token" value="{{ csrf_token() }}">
     <div class="col s12 m12 l12">

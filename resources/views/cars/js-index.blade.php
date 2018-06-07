@@ -17,7 +17,7 @@
                     {data: 'ano'},
                     {
                         data: function (data) {
-                            var buttonEditar = '<a href="/cars/edit/' + data.id + '" class="waves-effect waves-circle waves-light btn-floating btn-list-default" title="Editar"><i class="material-icons" id="icom-list">mode_edit</i></a>';
+                            var buttonEditar = '<a href="edit/' + data.id + '" class="waves-effect waves-circle waves-light btn-floating btn-list-default" title="Editar"><i class="material-icons" id="icom-list">mode_edit</i></a>';
                             var buttonInativar = '<a class="waves-effect waves-circle waves-light btn-floating btn-list-default" onclick="disable(' + data.id + ');" title="Excluir"><i class="material-icons" id="icom-list">delete</i></a>';
                             return buttonEditar + buttonInativar;
                         }, orderable: false, searchable: false
@@ -49,7 +49,7 @@
                         });
                         $.ajax({
                             type: "POST",
-                            url: '{{url('/cars/disable')}}/' + id,
+                            url: '{{url('admin/cars/disable')}}/' + id,
                             success: function (s)
                             {
                                 if (s == 'success') {

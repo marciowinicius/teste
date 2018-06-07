@@ -3,8 +3,11 @@
 namespace FederalSt\Http\Controllers;
 
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
+use FederalSt\Car;
+use FederalSt\Services\CarService;
 use FederalSt\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class CarController extends Controller
@@ -40,116 +43,86 @@ class CarController extends Controller
     }
 
     /**
-     * @param $productId
+     * @param $carId
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \DaveJamesMiller\Breadcrumbs\Facades\DuplicateBreadcrumbException
      */
-    public function edit($productId)
+    public function edit($carId)
     {
-        Breadcrumbs::register('federaist', function ($breadcrumbs) use ($productId) {
-            $breadcrumbs->push('Início', route('home'));
-            $breadcrumbs->push('Listar', route('indexProduct'));
-            $breadcrumbs->push('Editar', route('editProduct', ['id' => $productId]));
+        Breadcrumbs::register('federaist', function ($breadcrumbs) use ($carId) {
+            $breadcrumbs->push('Início', route('admin.homeAdmin'));
+            $breadcrumbs->push('Listar', route('admin.indexCarAdmin'));
+            $breadcrumbs->push('Editar', route('admin.editCar', ['id' => $carId]));
         });
-        $product = Product::find($productId)->toArray();
-        $shoppings = ShoppingService::getAll();
-        $company = Company::find($product['company_id']);
-        $companies = Company::where(['shopping_id' => $company['shopping_id']])->get();
-        $situations = ProductService::getAllSituation();
-        $all_swap_rules = SwapRule::where(['type' => 'product', 'status' => TRUE, 'excluded' => FALSE])->get()->toArray();
-        $all_use_rules = UseRule::where(['type' => 'product', 'status' => TRUE, 'excluded' => FALSE])->get()->toArray();
-        Session::flash('title', 'Produtos');
-        return view('products.edit', compact('product', 'shoppings', 'situations', 'companies', 'company', 'edit', 'all_swap_rules', 'add', 'all_use_rules'));
+        $users = User::all()->toArray();
+        $car = Car::find($carId)->toArray();
+        Session::flash('title', 'Veículos');
+        return view('cars.edit', compact('users', 'car'));
     }
 
     /**
      * @param Request $request
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, ProductService $productService)
+    public function store(Request $request, CarService $carService)
     {
         try {
-            $data = $request->except(['shopping_id']);
-            $data = $productService->convertDataStore($data);
-            $validator = $productService->validate($data);
+            $data = $request->all();
+            $validator = $carService->validate($data);
             if ($validator->fails()) {
-                return redirect()->route('addProduct')->withErrors($validator->errors())->withInput();
+                return redirect()->route('admin.addCar')->withErrors($validator->errors())->withInput();
             }
-            $file = $data['image'];
-            $data['image'] = uniqid('product_') . '.' . $file->getClientOriginalExtension();
             DB::beginTransaction();
-            $product = new Product();
-            $product->fill($data)->save();
+            $car = new Car();
+            $car = $car->fill($data);
+            $car->save();
             DB::commit();
-            $filePath = UtilitiesService::$AWS_DIR_PRODUCTS . $data['image'];
-            Storage::put($filePath, file_get_contents($request->file('image')));
-            Session::flash('flash_success', 'Produto cadastrado com sucesso.');
-            return redirect()->route('indexProduct');
+            Session::flash('flash_success', 'Veículo cadastrado com sucesso.');
+            return redirect()->route('admin.indexCarAdmin');
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            Session::flash('flash_error', 'Falha ao cadastrar veículo.');
+            return redirect()->route('admin.indexCarAdmin');
         }
     }
 
     /**
-     * Update de produto
      * @param Request $request
-     * @param $productId
+     * @param $carId
+     * @param CarService $carService
      * @return $this|\Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $productId, ProductService $productService)
+    public function update($carId, Request $request, CarService $carService)
     {
         try {
-            $data = $request->except(['shopping_id']);
-            $data = $productService->convertDataUpdate($data);
-            $validator = $productService->validate($data, TRUE);
+            $data = $request->all();
+            $validator = $carService->validate($data, $carId);
             if ($validator->fails()) {
-                return redirect()->route('editProduct', ['id' => $productId])->withErrors($validator->errors())->withInput();
-            }
-            $product = Product::find($productId);
-            if ($request->has('image')) {
-                Storage::delete(UtilitiesService::$AWS_DIR_PRODUCTS . $product->image);
-                $file = $data['image'];
-                $data['image'] = uniqid('product_') . '.' . $file->getClientOriginalExtension();
-                $filePath = UtilitiesService::$AWS_DIR_PRODUCTS . $data['image'];
-                Storage::put($filePath, file_get_contents($request->file('image')));
+                return redirect()->route('admin.editCar')->withErrors($validator->errors())->withInput();
             }
             DB::beginTransaction();
-            $product->fill($data)->save();
+            $car = Car::find($carId);
+            $car->fill($data)->save();
             DB::commit();
-            Session::flash('flash_success', 'Produto atualizado com sucesso.');
-            return redirect()->route('indexProduct');
+            Session::flash('flash_success', 'Veículo alterado com sucesso.');
+            return redirect()->route('admin.indexCarAdmin');
         } catch (\Exception $e) {
+            DB::rollBack();
             dd($e->getMessage());
-            Session::flash('flash_error', 'Erro ao salvar o produto!');
-            return redirect()->route('editProduct', ['id' => $productId])->withErrors($e)->withInput();
+            Session::flash('flash_error', 'Falha ao alterar veículo.');
+            return redirect()->route('admin.indexCarAdmin');
         }
     }
 
     /**
-     * @param $productId
+     * @param $carId
      * @return \Illuminate\Http\JsonResponse
      */
-    public function disable($productId)
+    public function disable($carId)
     {
         try {
-            $user = UsersAdm::find(Auth::user()->id);
-            $product = Product::find($productId);
-            if (!is_null($product)) {
-                if ($user->isSuperUser()) {
-                    $product->excluded = TRUE;
-                    $product->save();
-                    return response()->json('success');
-                } else {
-                    $product = $product->where(['company_id' => $user->company_id])->first();
-                    if (!is_null($product)) {
-                        $product->excluded = TRUE;
-                        $product->save();
-                        return response()->json('success');
-                    }
-                }
-            }
-            throw new Exception('Produto não excluído.');
+            $car = Car::find($carId);
+            $car->delete();
+            return response()->json('success');
 
         } catch (\Exception $e) {
             return response()->json($e->getMessage());

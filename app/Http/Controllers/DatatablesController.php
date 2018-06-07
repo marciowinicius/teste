@@ -17,7 +17,7 @@ class DatatablesController extends Controller
         $cars = CarService::getCars();
 
         return DataTables::of($cars)
-            ->editColumn('status', function ($car) {
+            ->editColumn('user_id', function ($car) {
                 return User::find($car->user_id)->name;
             })
             ->orderColumn('id', '-id $1')

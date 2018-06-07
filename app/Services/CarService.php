@@ -11,6 +11,7 @@ namespace FederalSt\Services;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CarService
 {
@@ -23,5 +24,25 @@ class CarService
         }
 
         return $cars;
+    }
+
+    /**
+     * @param $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public function validate($data, $carId = 0)
+    {
+        return Validator::make($data, [
+            'user_id' => 'required',
+            'placa' => [
+                'required',
+                'regex:/^[A-Z]{3}\-[0-9]{4}$/',
+                'unique:cars,placa,' . $carId,
+            ],
+            'renavam' => 'required|string|size:20',
+            'modelo' => 'required|string|max:250',
+            'marca' => 'required|string|max:250',
+            'ano' => 'required|date_format:"Y"',
+        ]);
     }
 }
