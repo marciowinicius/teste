@@ -106,10 +106,12 @@ class CarController extends Controller
             $car = $car->fill($data);
             $car->save();
             DB::commit();
+            $carService->sendNotification($data['user_id'], $car->id);
             Session::flash('flash_success', 'Veículo cadastrado com sucesso.');
             return redirect()->route('admin.indexCarAdmin');
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             Session::flash('flash_error', 'Falha ao cadastrar veículo.');
             return redirect()->route('admin.indexCarAdmin');
         }
@@ -131,8 +133,10 @@ class CarController extends Controller
             }
             DB::beginTransaction();
             $car = Car::find($carId);
-            $car->fill($data)->save();
+            $car = $car->fill($data);
+            $car->save();
             DB::commit();
+            $carService->sendNotification($data['user_id'], $car->id, FALSE);
             Session::flash('flash_success', 'Veículo alterado com sucesso.');
             return redirect()->route('admin.indexCarAdmin');
         } catch (\Exception $e) {

@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CarCreated extends Notification
+class CarEdited extends Notification
 {
     use Queueable;
 
@@ -44,7 +44,7 @@ class CarCreated extends Notification
     {
         return (new MailMessage)
             ->level('info')// It is kind of email. Available options: info, success, error. Default: info
-            ->line(trans('message.notification_created_car_line'))
+            ->line(trans('message.notification_edited_car_line'))
             ->action(trans('message.notification_car_action'), url('/cars/view/' . $this->car_id))
             ->line(trans('message.notification_thank_you'));
     }

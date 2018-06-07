@@ -9,6 +9,8 @@
 namespace FederalSt\Services;
 
 
+use FederalSt\Notifications\CarCreated;
+use FederalSt\Notifications\CarEdited;
 use FederalSt\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,5 +47,15 @@ class CarService
             'marca' => 'required|string|max:250',
             'ano' => 'required|date_format:"Y"',
         ]);
+    }
+
+    public function sendNotification($user_id, $car_id, $create = TRUE)
+    {
+        $user = User::find($user_id);
+        if ($create == TRUE) {
+            $user->notify(new CarCreated($car_id));
+        } else {
+            $user->notify(new CarEdited($car_id));
+        }
     }
 }
