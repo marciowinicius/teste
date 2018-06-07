@@ -37,11 +37,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], f
     $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
     $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('homeAdmin');
 
     /*Carros*/
     Route::group(['prefix' => 'cars'], function () {
-        Route::get('/index', 'CarController@index')->name('indexCarAdmin');
+        Route::get('/index', 'CarController@indexCarAdmin')->name('indexCarAdmin');
         Route::get('/datatable', 'DatatablesController@carDatatable')->name('carAdminDatatable');
         Route::get('/add', 'CarController@add')->name('addCar');
         Route::post('/add', 'CarController@store')->name('storeCar');

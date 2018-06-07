@@ -4,8 +4,8 @@
         <div class="card">
             <div class="card-content">
                 <div class="row">
-                    <form class="col s12" id="form" method="POST" action="{{route('updateProduct', ['id' => $product['id']])}}" enctype="multipart/form-data">
-                        @include('products.form')
+                    <form class="col s12" id="form" method="POST" action="{{route('admin.updateCar', ['id' => $car['id']])}}" enctype="multipart/form-data">
+                        @include('cars.form')
                     </form>
                 </div>
             </div>
@@ -13,5 +13,5 @@
     </div>
 @endsection
 @section('post-script')
-    @include('products.js')
+    @include('cars.js')
 @endsection

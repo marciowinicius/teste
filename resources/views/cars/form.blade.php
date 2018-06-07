@@ -344,6 +344,5 @@
 </div>
 @section('post-script')
     @include('js.js-mask')
-    @include('js.js-enable-disabled')
-    @include('products.js')
+    @include('cars.js')
 @endsection

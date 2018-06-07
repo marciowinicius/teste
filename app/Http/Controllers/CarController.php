@@ -3,6 +3,7 @@
 namespace FederalSt\Http\Controllers;
 
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
+use FederalSt\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,10 +16,10 @@ class CarController extends Controller
     public function indexCarAdmin()
     {
         Breadcrumbs::register('federaist', function ($breadcrumbs) {
-            $breadcrumbs->push('Início', route('home'));
+            $breadcrumbs->push('Início', route('admin.homeAdmin'));
             $breadcrumbs->push('Listar', route('admin.indexCarAdmin'));
         });
-        Session::flash('title', 'Carros');
+        Session::flash('title', 'Veículos');
         return view('cars.index');
     }
 
@@ -29,17 +30,13 @@ class CarController extends Controller
     public function add()
     {
         Breadcrumbs::register('federaist', function ($breadcrumbs) {
-            $breadcrumbs->push('Início', route('home'));
-            $breadcrumbs->push('Listar', route('indexProduct'));
-            $breadcrumbs->push('Cadastrar', route('addProduct'));
+            $breadcrumbs->push('Início', route('admin.homeAdmin'));
+            $breadcrumbs->push('Listar', route('admin.indexCarAdmin'));
+            $breadcrumbs->push('Cadastrar', route('admin.addCar'));
         });
-        $shoppings = ShoppingService::getAll();
-        $situations = ProductService::getAllSituation();
-        $companies = Company::where(['id' => Auth::user()->company_id])->get();
-        $all_swap_rules = SwapRule::where(['type' => 'product', 'status' => TRUE, 'excluded' => FALSE])->get()->toArray();
-        $all_use_rules = UseRule::where(['type' => 'product', 'status' => TRUE, 'excluded' => FALSE])->get()->toArray();
-        Session::flash('title', 'Produtos');
-        return view('products.add', compact('shoppings', 'situations', 'companies', 'edit', 'all_swap_rules', 'add', 'all_use_rules'));
+        $users = User::all()->toArray();
+        Session::flash('title', 'Veículos');
+        return view('cars.add', compact('users'));
     }
 
     /**
