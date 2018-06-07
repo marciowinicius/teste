@@ -90,7 +90,7 @@
                         <i class="nav-drop-icon material-icons">keyboard_arrow_right</i></a>
                     <div class="collapsible-body">
                         <ul>
-                            <li><a href="{{ route('admin.indexCar') }}">Carros</a>
+                            <li><a href="{{ route('admin.indexCarAdmin') }}">Carros</a>
                         </ul>
                     </div>
                 </li>

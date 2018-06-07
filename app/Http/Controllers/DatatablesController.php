@@ -2,8 +2,9 @@
 
 namespace FederalSt\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use FederalSt\Services\CarService;
+use FederalSt\User;
+use Yajra\DataTables\DataTables;
 
 class DatatablesController extends Controller
 {
@@ -13,23 +14,11 @@ class DatatablesController extends Controller
      */
     public function carDatatable()
     {
-        $user = Auth::user();
-        $products = DB::table('cars')->select(['id', 'name', 'situation', 'status', 'company_id'])
-            ->where(['excluded' => FALSE]);
-        if ($user->hasRole('product.adm') && !$user->isSuperUser()) {
-            $shoppingId = Company::find($user->company_id)->shopping_id;
-            $companiesIds = Company::whereShoppingId($shoppingId)->select(['id'])->get();
-            $products = $products->whereIn('company_id', $companiesIds);
-        } elseif (!$user->isSuperUser()) {
-            $products = $products->where(['company_id' => $user->company_id]);
-        }
+        $cars = CarService::getCars();
 
-        return Datatables::of($products)
-            ->editColumn('status', function ($product) {
-                return $product->status == TRUE ? 'Ativo' : 'Inativo';
-            })
-            ->addColumn('loja', function ($product) {
-                return Company::find($product->company_id)->fantasyname;
+        return DataTables::of($cars)
+            ->editColumn('status', function ($car) {
+                return User::find($car->user_id)->name;
             })
             ->orderColumn('id', '-id $1')
             ->make(true);
