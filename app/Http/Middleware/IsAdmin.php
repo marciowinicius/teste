@@ -3,6 +3,7 @@
 namespace FederalSt\Http\Middleware;
 
 use Closure;
+use FederalSt\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -20,7 +21,7 @@ class IsAdmin
         if (Auth::check()) {
 
 
-            if (Auth::user()->role == 2) {
+            if (Auth::user()->role == User::ROLE_ADMIN) {
 
 
                 return $next($request);

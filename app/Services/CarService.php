@@ -9,6 +9,7 @@
 namespace FederalSt\Services;
 
 
+use FederalSt\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,7 @@ class CarService
     {
         $user = Auth::user();
         $cars = DB::table('cars')->select(['id', 'user_id', 'placa', 'renavam', 'modelo', 'marca', 'ano']);
-        if ($user->role != 2) {
+        if ($user->role != User::ROLE_ADMIN) {
             $cars->where(['user_id' => $user->id]);
         }
 

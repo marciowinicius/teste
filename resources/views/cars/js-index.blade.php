@@ -15,7 +15,7 @@
                     {data: 'modelo'},
                     {data: 'marca'},
                     {data: 'ano'},
-                    @if(\Illuminate\Support\Facades\Auth::user()->role == 2)
+                    @if(\Illuminate\Support\Facades\Auth::user()->role == \FederalSt\User::ROLE_ADMIN)
                     {
                         data: function (data) {
                             var buttonEditar = '<a href="edit/' + data.id + '" class="waves-effect waves-circle waves-light btn-floating btn-list-default" title="Editar"><i class="material-icons" id="icom-list">mode_edit</i></a>';
