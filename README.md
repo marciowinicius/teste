@@ -80,6 +80,7 @@ Entre em contato conosco, caso você tenha alguma dúvida ou quando terminar o p
 - XML PHP Extension
 - Ctype PHP Extension
 - JSON PHP Extension
+- PostgreSQL
 
 # Observações para funcionamento do projeto
 > 1 - Faça o clone para seu computador.
