@@ -96,7 +96,9 @@ Entre em contato conosco, caso você tenha alguma dúvida ou quando terminar o p
 
 > 7 - Rode também as seeds com `php artisan db:seed`
 
-> 8 - Para rodar o projeto `php artisan serve` que por padrão para acessar a aplicação basta acessar localhost:8000
+> 8 - Para que os emails funcione você deve editar as informações no .env com informações de email que funcione o envio de email.
+
+> 9 - Para rodar o projeto `php artisan serve` que por padrão para acessar a aplicação basta acessar localhost:8000
 
 > OBS: Caso você utilize `php artisan serve` em alguns computadores pode-se ter problemas com os assets localizados na pasta public do projeto.
  Isso são assets de JS/CSS que fazer o front-end da aplicação. Caso você tenha esse problema sugiro criar um virtualhost com o apache. 
